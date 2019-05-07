@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+from struct import pack
+from array import array
+
 docNo = -1
 docIds = []
 index = {}
@@ -34,7 +37,19 @@ with open('docs.dat', 'w') as file:
 		file.write(doc)
 		file.write('\n')
 
-with open('words.dat', 'w') as file:
-	for word in sorted(index):
-		file.write(word)
-		file.write('\n')
+wordsFile = open('words.dat', 'w')
+postingsFile = open('postings.dat', 'wb')
+offsetFile = open('offset.dat', 'wb')
+
+for word in sorted(index):
+	wordsFile.write(word)
+	wordsFile.write('\n')
+
+	offsetFile.write(pack('i', postingsFile.tell()))
+
+	docs = array('i', index[word][0])
+	postingsFile.write(pack('i', len(docs)))
+	docs.tofile(postingsFile)
+
+	freqs = array('i', index[word][1])
+	freqs.tofile(postingsFile)
