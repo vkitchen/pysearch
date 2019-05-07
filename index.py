@@ -19,13 +19,13 @@ with open('wsj.xml', 'r') as file:
 				docIds.append(word)
 				continue
 			if word in index:
-				lastPosting = index[word][-1]
-				if lastPosting[0] == docNo:
-					index[word][-1] = (docNo, lastPosting[1] + 1)
+				if index[word][0][-1] == docNo:
+					index[word][1][-1] += 1
 				else:
-					index[word].append((docNo, 1))
+					index[word][0].append(docNo)
+					index[word][1].append(1)
 			else:
-				index[word] = [(docNo, 1)]
+				index[word] = ([docNo], [1])
 
 # Write index
 
