@@ -10,8 +10,7 @@ with open('wsj.xml', 'r') as file:
 	isDocno = False
 	for line in file:
 		for word in line.split():
-			word = word.lower()
-			if word == '<docno>':
+			if word == '<DOCNO>':
 				isDocno = True
 				continue
 			if word[0] == '<' and word[-1] == '>':
@@ -21,6 +20,7 @@ with open('wsj.xml', 'r') as file:
 				isDocno = False
 				docIds.append(word)
 				continue
+			word = word.lower()
 			if word in index:
 				if index[word][0][-1] == docNo:
 					index[word][1][-1] += 1
@@ -28,7 +28,7 @@ with open('wsj.xml', 'r') as file:
 					index[word][0].append(docNo)
 					index[word][1].append(1)
 			else:
-				index[word] = ([docNo], [1])
+				index[word] = (array('i', [docNo]), array('i', [1]))
 
 # Write index
 
@@ -47,9 +47,9 @@ for word in sorted(index):
 
 	offsetFile.write(pack('i', postingsFile.tell()))
 
-	docs = array('i', index[word][0])
+	docs = index[word][0]
 	postingsFile.write(pack('i', len(docs)))
 	docs.tofile(postingsFile)
 
-	freqs = array('i', index[word][1])
+	freqs = index[word][1]
 	freqs.tofile(postingsFile)
