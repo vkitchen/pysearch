@@ -54,12 +54,12 @@ for term in query:
 	postingsFile.seek(offset+4)
 
 	docs = array('i')
-	docs.fromstring(postingsFile.read(4*docCount))
+	docs.frombytes(postingsFile.read(4*docCount))
 
 	postingsFile.seek(offset+4 + docCount * 4)
 
 	freqs = array('i')
-	freqs.fromstring(postingsFile.read(4*docCount))
+	freqs.frombytes(postingsFile.read(4*docCount))
 
 	results.append((docs, freqs))
 
